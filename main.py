@@ -10,7 +10,6 @@
 """
 from __future__ import annotations
 
-import pathlib
 import platform
 import sys
 from typing import Optional
@@ -19,7 +18,6 @@ from PySide6.QtCore import Qt, QSize
 from PySide6.QtGui import QFont
 from PySide6.QtWidgets import (
     QApplication,
-    QFileDialog,
     QHBoxLayout,
     QLabel,
     QMainWindow,
@@ -215,26 +213,10 @@ def _ensure_user_profile(qapp: QApplication) -> bool:
     if config.load_user_profile() is not None:
         return True
 
-    QMessageBox.information(
-        None,
-        "USERPROFILE の設定",
-        "ユーザープロファイルフォルダを選択してください。\n\n"
-        "例: C:\\Users\\12414\n\n"
-        "このフォルダを基準に同期環境やデータ保存先が自動設定されます。",
-    )
-    folder = QFileDialog.getExistingDirectory(
-        None,
-        "ユーザープロファイルフォルダを選択",
-        str(pathlib.Path.home()),
-    )
-    if not folder:
-        return False
-    p = pathlib.Path(folder)
-    if not p.exists() or not p.is_dir():
-        return False
-    config.save_user_profile(p)
-    config.reload_user_profile(p)
-    return True
+    from app.ui.dialogs.setup_profile_dialog import SetupUserProfileDialog
+
+    dlg = SetupUserProfileDialog()
+    return dlg.exec() == SetupUserProfileDialog.DialogCode.Accepted
 
 
 def main() -> None:
