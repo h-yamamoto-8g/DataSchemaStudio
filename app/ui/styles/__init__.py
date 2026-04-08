@@ -120,6 +120,11 @@ QTreeWidget::item:hover {
 QTreeWidget::branch {
     background: transparent;
 }
+QTreeWidget::branch:has-children:closed,
+QTreeWidget::branch:has-children:open {
+    border-image: none;
+    image: none;
+}
 
 /* ── コンボボックス ── */
 QComboBox {

@@ -18,6 +18,10 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from app.ui.widgets.icon_utils import get_icon
+
+_COLOR_FOLDER = "#6b7280"
+
 
 # ツリーノードに格納するカスタムデータのロール
 ROLE_FILE_KEY = Qt.ItemDataRole.UserRole
@@ -77,6 +81,8 @@ class SchemaTreeWidget(QWidget):
         self._tree.customContextMenuRequested.connect(self._on_context_menu)
         self._tree.currentItemChanged.connect(self._on_current_changed)
         self._tree.itemDoubleClicked.connect(self._on_double_click)
+        self._tree.itemExpanded.connect(self._on_item_expanded)
+        self._tree.itemCollapsed.connect(self._on_item_collapsed)
         vl.addWidget(self._tree)
 
     def set_data(self, data: dict[str, list[dict[str, Any]]]) -> None:
@@ -110,6 +116,7 @@ class SchemaTreeWidget(QWidget):
         font = root.font(0)
         font.setBold(True)
         root.setFont(0, font)
+        self._set_folder_icon(root, True)
 
         for i, item in enumerate(items):
             code = item.get("holder_group_code", "")
@@ -151,6 +158,7 @@ class SchemaTreeWidget(QWidget):
         font = root.font(0)
         font.setBold(True)
         root.setFont(0, font)
+        self._set_folder_icon(root, True)
 
         for i, item in enumerate(items):
             domain = item.get("domain_code", "")
@@ -173,6 +181,19 @@ class SchemaTreeWidget(QWidget):
 
             if not active:
                 node.setForeground(0, Qt.GlobalColor.gray)
+
+    def _set_folder_icon(self, item: QTreeWidgetItem, expanded: bool) -> None:
+        """ノードに開閉状態のフォルダアイコンを設定する。"""
+        svg = ":/icons/down.svg" if expanded else ":/icons/right.svg"
+        item.setIcon(0, get_icon(svg, _COLOR_FOLDER, size=12))
+
+    def _on_item_expanded(self, item: QTreeWidgetItem) -> None:
+        if item.data(0, ROLE_ITEM_INDEX) == -1:
+            self._set_folder_icon(item, True)
+
+    def _on_item_collapsed(self, item: QTreeWidgetItem) -> None:
+        if item.data(0, ROLE_ITEM_INDEX) == -1:
+            self._set_folder_icon(item, False)
 
     def _on_domain_changed(self, text: str) -> None:
         self._domain_filter = "" if text == "全て" else text

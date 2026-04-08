@@ -8,5 +8,7 @@
     <file alias="home.svg">home.svg</file>
     <file alias="app-logo.svg">app-logo.svg</file>
     <file alias="path.svg">path.svg</file>
+    <file alias="right.svg">right.svg</file>
+    <file alias="down.svg">down.svg</file>
   </qresource>
 </RCC>
