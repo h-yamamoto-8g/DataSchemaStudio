@@ -7,5 +7,6 @@
     <file alias="reload.svg">reload.svg</file>
     <file alias="home.svg">home.svg</file>
     <file alias="app-logo.svg">app-logo.svg</file>
+    <file alias="path.svg">path.svg</file>
   </qresource>
 </RCC>

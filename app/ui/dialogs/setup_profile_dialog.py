@@ -25,6 +25,7 @@ from PySide6.QtWidgets import (
 )
 
 from app.config import save_user_profile, reload_user_profile
+from app.ui.widgets.icon_utils import get_icon
 
 
 class SetupUserProfileDialog(QDialog):
@@ -77,9 +78,11 @@ class SetupUserProfileDialog(QDialog):
         self._input_path.setFont(font_input)
         hl_input.addWidget(self._input_path)
 
-        btn_browse = QPushButton("...")
+        btn_browse = QPushButton()
         btn_browse.setMinimumSize(QSize(30, 30))
         btn_browse.setMaximumSize(QSize(30, 30))
+        btn_browse.setIcon(get_icon(":/icons/path.svg", "#333333", size=16))
+        btn_browse.setIconSize(QSize(16, 16))
         btn_browse.clicked.connect(self._browse)
         hl_input.addWidget(btn_browse)
 
