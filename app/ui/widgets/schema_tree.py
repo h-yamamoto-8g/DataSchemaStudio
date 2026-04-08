@@ -95,7 +95,9 @@ class SchemaTreeWidget(QWidget):
         self._build_flat_node("valid_tests")
         self._build_flat_node("valid_samples")
 
-        self._tree.expandAll()
+        # トップレベルノードのみ展開（子は折りたたみ）
+        for i in range(self._tree.topLevelItemCount()):
+            self._tree.topLevelItem(i).setExpanded(True)
 
     def _build_holder_groups_node(self) -> None:
         """Holder Groups ノードを構築する（参照子ノード付き）。"""
